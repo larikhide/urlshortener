@@ -6,6 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/google/uuid v1.3.0
+	github.com/itchyny/base58-go v0.2.0
 	github.com/stretchr/testify v1.7.0
 )
 
