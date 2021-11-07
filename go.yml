@@ -1,0 +1,31 @@
+name: Go
+
+# условная точка входа
+on:
+
+  # для какой ветки будет запуск, можно указать $default-branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# аналог стейджей в гитлабе
+jobs: 
+
+  build: 
+    runs-on: ubuntu-latest
+    steps: 
+    # TODO: как сделать: "Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it"?
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    # запуск команд с использованием терминала раннера (здесь ubuntu-latesst)
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
