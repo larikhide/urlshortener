@@ -23,7 +23,7 @@ const CacheDuration = 6 * time.Hour
 
 func NewDB() (*RedisDB, error) {
 	db := redis.NewClient(&redis.Options{
-		Addr:     "localhost",
+		Addr:     "localhost:6379",
 		Password: "",
 		DB:       0,
 	})
