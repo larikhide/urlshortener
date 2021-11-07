@@ -5,7 +5,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/larikhide/urlshortener/api/handler"
 	"github.com/larikhide/urlshortener/api/routergin"
+	"github.com/larikhide/urlshortener/app/repos/urls"
+	"github.com/larikhide/urlshortener/db/redisdb"
 )
 
 func main() {
@@ -23,9 +26,16 @@ func main() {
 	log.Printf("Local time zone %s. Service started at %s", tz,
 		tnow.Format("2006-01-02T15:04:05.000 MST"))
 
-	router := routergin.NewRouterGin()
+	db, err := redisdb.NewDB()
+	if err != nil {
+		log.Fatal("Cannot initialize database: %w", err)
+	}
 
-	err := router.Run(":9808")
+	storage := urls.NewURLs(db)
+	hs := handler.NewHandlers(storage)
+	router := routergin.NewRouterGin(hs)
+
+	err = router.Run(":9808")
 	if err != nil {
 		log.Fatal("Failed to start the web server - Error: %w", err)
 	}

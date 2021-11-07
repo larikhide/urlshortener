@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/google/uuid"
 	"github.com/larikhide/urlshortener/app/repos/urls"
 )
 
@@ -44,7 +43,7 @@ func NewDB() (*RedisDB, error) {
 	return us, nil
 }
 
-func (rds *RedisDB) SaveUrlMapping(ctx context.Context, shortUrl string, longUrl string, uid uuid.UUID) error {
+func (rds *RedisDB) SaveUrlMapping(ctx context.Context, shortUrl string, longUrl string) error {
 	err := rds.db.Set(ctx, shortUrl, longUrl, CacheDuration).Err()
 	if err != nil {
 		//log.Printf("Failed saving key url | Error: %v - shortUrl: %s - originalUrl: %s\n", err, shortUrl, originalUrl)
@@ -53,11 +52,14 @@ func (rds *RedisDB) SaveUrlMapping(ctx context.Context, shortUrl string, longUrl
 	return nil
 }
 
-func (rds *RedisDB) RetrieveInitialUrl(ctx context.Context, shortUrl string) (string, error) {
+func (rds *RedisDB) RetrieveInitialUrl(ctx context.Context, shortUrl string) (*urls.URL, error) {
 	result, err := rds.db.Get(ctx, shortUrl).Result()
 	if err != nil {
 		//panic(fmt.Sprintf("Failed RetrieveInitialUrl url | Error: %v - shortUrl: %s\n", err, shortUrl))
-		return "", fmt.Errorf("failed retrieve url | error: %v - shorturl: %s", err, shortUrl)
+		return &urls.URL{}, fmt.Errorf("failed retrieve url | error: %v - shorturl: %s", err, shortUrl)
 	}
-	return result, nil
+	return &urls.URL{
+		LongURL:  result,
+		ShortURL: shortUrl,
+	}, nil
 }
