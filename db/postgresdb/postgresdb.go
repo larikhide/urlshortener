@@ -1,4 +1,4 @@
-package pgstore
+package postgresdb
 
 import (
 	"context"
@@ -23,7 +23,7 @@ type PostgresDB struct {
 	db *sql.DB
 }
 
-func NewUsers(dsn string) (*PostgresDB, error) {
+func NewDB(dsn string) (*PostgresDB, error) {
 	db, err := sql.Open("pgx", dsn)
 	if err != nil {
 		return nil, err

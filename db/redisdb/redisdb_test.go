@@ -2,7 +2,6 @@ package redisdb
 
 import (
 	"context"
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -11,10 +10,7 @@ import (
 var testRedisDB = &RedisDB{}
 
 func init() {
-	_store, err := NewDB()
-	if err != nil {
-		fmt.Errorf("unexpected error: %w", err)
-	}
+	_store, _ := NewDB("redis://user:password@localhost:6789/test?db=0")
 	testRedisDB = _store
 }
 

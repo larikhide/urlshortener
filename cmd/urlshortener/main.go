@@ -8,6 +8,7 @@ import (
 	"github.com/larikhide/urlshortener/api/handler"
 	"github.com/larikhide/urlshortener/api/routergin"
 	"github.com/larikhide/urlshortener/app/repos/urls"
+	"github.com/larikhide/urlshortener/db/postgresdb"
 	"github.com/larikhide/urlshortener/db/redisdb"
 )
 
@@ -26,9 +27,27 @@ func main() {
 	log.Printf("Local time zone %s. Service started at %s", tz,
 		tnow.Format("2006-01-02T15:04:05.000 MST"))
 
-	db, err := redisdb.NewDB()
-	if err != nil {
-		log.Fatal("Cannot initialize database: %w", err)
+	var storage urls.URLStore
+	stt := os.Getenv("URLSHORTENER_STORE")
+
+	switch stt {
+	case "rds":
+		dsn := os.Getenv("DATABASE_URL")
+		rds, err := redisdb.NewDB(dsn)
+		if err != nil {
+			log.Fatal("Cannot initialize database: %w", err)
+		}
+		storage = rds
+	case "pgst":
+		dsn := os.Getenv("DATABASE_URL")
+		pgs, err := postgresdb.NewDB(dsn)
+		if err != nil {
+			log.Fatal("Cannot initialize database: %w", err)
+		}
+		defer pgs.Close()
+		storage = pgs
+	default:
+		log.Fatal("unknown REGUSER_STORE = ", stt)
 	}
 
 	storage := urls.NewURLs(db)
