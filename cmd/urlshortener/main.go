@@ -50,11 +50,11 @@ func main() {
 		log.Fatal("unknown REGUSER_STORE = ", stt)
 	}
 
-	storage := urls.NewURLs(db)
-	hs := handler.NewHandlers(storage)
+	st := urls.NewURLs(storage)
+	hs := handler.NewHandlers(st)
 	router := routergin.NewRouterGin(hs)
 
-	err = router.Run(":9808")
+	err := router.Run(":9808")
 	if err != nil {
 		log.Fatal("Failed to start the web server - Error: %w", err)
 	}
