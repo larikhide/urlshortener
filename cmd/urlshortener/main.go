@@ -30,21 +30,21 @@ func main() {
 
 	var storage urls.URLStore
 
-	//stt := os.Getenv("URLSHORTENER_STORE")
-	stt := "mem"
+	stt := os.Getenv("URLSHORTENER_STORE")
+	//stt := "mem"
 
 	switch stt {
 	case "rds":
-		//dsn := os.Getenv("DATABASE_URL")
-		dsn := "redis://user:password@localhost:6789/3?dial_timeout=3&db=1&read_timeout=6s&max_retries=2"
+		dsn := os.Getenv("DATABASE_URL")
+		//dsn := "redis://user:password@localhost:6789/3?dial_timeout=3&db=1&read_timeout=6s&max_retries=2"
 		rds, err := redisdb.NewDB(dsn)
 		if err != nil {
 			log.Fatal("Cannot initialize database: %w", err)
 		}
 		storage = rds
 	case "pgst":
-		//dsn := os.Getenv("DATABASE_URL")
-		dsn := "postgres://postgres:1110@localhost/test?sslmode=disable"
+		dsn := os.Getenv("DATABASE_URL")
+		//dsn := "postgres://postgres:1110@localhost/test?sslmode=disable"
 		pgs, err := postgresdb.NewDB(dsn)
 		if err != nil {
 			log.Fatal("Cannot initialize database: %w", err)
