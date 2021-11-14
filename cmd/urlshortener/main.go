@@ -61,7 +61,7 @@ func main() {
 	hs := handler.NewHandlers(st)
 	router := routergin.NewRouterGin(hs)
 
-	err := router.Run(":9808")
+	err := router.Run(":" + os.Getenv("PORT"))
 	if err != nil {
 		log.Fatal("Failed to start the web server - Error: %w", err)
 	}
