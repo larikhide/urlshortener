@@ -21,16 +21,16 @@ type RedisDB struct {
 // the cache and stored back in RDBMS whenever the cache is full
 const CacheDuration = 6 * time.Hour
 
-func NewDB() (*RedisDB, error) {
-	db := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
-		DB:       0,
-	})
+func NewDB(dsn string) (*RedisDB, error) {
+	options, err := redis.ParseURL(dsn)
+	if err != nil {
+		return nil, err
+	}
+	db := redis.NewClient(options)
 
 	// TODO: нормально ли здесь создавать контекст для пинга? Он вроде пустой и ни к чему не обязывает
 	ctx := context.Background()
-	_, err := db.Ping(ctx).Result()
+	_, err = db.Ping(ctx).Result()
 	if err != nil {
 		db.Close()
 		return nil, err
