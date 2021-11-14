@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/larikhide/urlshortener/app/repos/urls"
 )
 

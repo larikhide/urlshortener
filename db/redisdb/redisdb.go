@@ -43,6 +43,26 @@ func NewDB(dsn string) (*RedisDB, error) {
 	return us, nil
 }
 
+// hardcode initialization
+// func InitializeStore() *RedisDB {
+// 	redisClient := redis.NewClient(&redis.Options{
+// 		Addr:     "localhost:6379",
+// 		Password: "",
+// 		DB:       0,
+// 	})
+// 	ctx := context.Background()
+// 	pong, err := redisClient.Ping(ctx).Result()
+// 	if err != nil {
+// 		panic(fmt.Sprintf("Error init Redis: %v", err))
+// 	}
+
+// 	fmt.Printf("\nRedis started successfully: pong message = {%s}", pong)
+
+// 	return &RedisDB{
+// 		db: redisClient,
+// 	}
+// }
+
 func (rds *RedisDB) SaveUrlMapping(ctx context.Context, shortUrl string, longUrl string) error {
 	err := rds.db.Set(ctx, shortUrl, longUrl, CacheDuration).Err()
 	if err != nil {
