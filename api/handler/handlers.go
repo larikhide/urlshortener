@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"reflect"
 
 	"github.com/larikhide/urlshortener/app/repos/urls"
 	"github.com/larikhide/urlshortener/app/shortener"
@@ -52,9 +51,9 @@ func (hs *Handlers) GenShortLink(ctx context.Context, u URL) (URL, error) {
 }
 
 func (hs *Handlers) HandleShortUrlRedirect(ctx context.Context, shortUrl string) (URL, error) {
-	if reflect.TypeOf(shortUrl) == reflect.TypeOf("") {
-		return URL{}, fmt.Errorf("bad request: input isnt string")
-	}
+	// if reflect.TypeOf(shortUrl) == reflect.TypeOf("") {
+	// 	return URL{}, fmt.Errorf("bad request: input isnt string")
+	// }
 
 	nbu, err := hs.db.Read(ctx, shortUrl)
 	if err != nil {

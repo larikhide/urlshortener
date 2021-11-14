@@ -8,6 +8,7 @@ import (
 	"github.com/larikhide/urlshortener/api/handler"
 	"github.com/larikhide/urlshortener/api/routergin"
 	"github.com/larikhide/urlshortener/app/repos/urls"
+	"github.com/larikhide/urlshortener/db/mem"
 	"github.com/larikhide/urlshortener/db/postgresdb"
 	"github.com/larikhide/urlshortener/db/redisdb"
 )
@@ -30,7 +31,7 @@ func main() {
 	var storage urls.URLStore
 
 	//stt := os.Getenv("URLSHORTENER_STORE")
-	stt := "pgst"
+	stt := "mem"
 
 	switch stt {
 	case "rds":
@@ -50,6 +51,8 @@ func main() {
 		}
 		defer pgs.Close()
 		storage = pgs
+	case "mem":
+		storage = mem.NewDB()
 	default:
 		log.Fatal("unknown URLSHORTENER_STORE = ", stt)
 	}
